@@ -20,6 +20,23 @@ router.get('/projects', (req, res) => {
         })
 })
 
+router.get('/tasks', (req, res) => {
+    projectsDB.joinTasks()
+        .then(task =>{
+            if (task) {
+                res.status(200).json(task);
+            } else {
+                res.status(404).json({ message: 'tasks not found' });
+            }    
+        })
+        .catch(err =>{
+            console.log(err);
+            res.status(500).json({
+                message: 'Error retrieving the tasks from database',
+            });   
+        })
+})
+
 router.get('/resources', (req, res) => {
     projectsDB.findResources()
         .then(resource =>{
@@ -58,5 +75,7 @@ router.post('/resources', (req,res) => {
             res.status(500).json({ error: "There was an error while add the resource to the database" })   
         })
 })
+
+
 
 module.exports = router; 
